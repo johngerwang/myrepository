@@ -1,0 +1,137 @@
+1.内存管理，垃圾回收
+2.动态代理
+3.新特性
+4.代理模式，Adapter模式
+5.回调，监听器
+
+Lambda表达式
+语法结构
+() -> some expression
+(arguments) -> { body just like function }
+
+单方法类型，如Runnable接口只有run方法。则可以直接用下面的语句来定义一个lambda表达式
+new Runnable() {
+     public void run() {
+         performWork();
+    }
+};
+等价于
+() -> performWork();
+
+在lambda表达式中，你可以省略参数的数据类型。
+(int x) -> { return x + 1; }  等价于 x -> { return x + 1; }
+(String s) -> { System.out.println(s); }等价于(s) -> { System.out.println(s); }
+
+实现匿名类。
+Arrays.sort(persons, new Comparator() { //persons为Person类型的数组。
+    @Override
+    public int compare(Person first, Person second) {
+        return first.getName().compareTo(second.getName());
+    }
+});
+ 
+// 这也是一个标准的排序，但是有趣的是，它传入的是一个lambda表达式，而不是一个Comparator类型的对象
+Arrays.sort(persons,(first, second) -> first.getName().compareTo(second.getName()));
+此处有使用到类型推断。即first，second的类型被被认为是Person类型。
+
+
+interface Operator{
+	public int operate(int x, int y);
+}
+Operator addition =(op1,op2)->op1+op2;
+System.out.println(addition.operate(2,3)); ->addtion相当于实现了Operator的一个类。
+
+使用了代码块的lambda表达式
+interface GenericOperator {
+    public int operate(int... operands);
+}
+GenericOperator multiply = numbers -> {  //numbers是一个数组，因为operate的参数是可变长度的，所以传递进去的2,3,4就以数组类型存储。
+    int result = 1;
+   for(int num : numbers)
+   result *= num;
+   return result;
+ };
+ System.out.println("Multiplication result: " + multiply.operate(2,3,4));
+
+遍历数组
+List<File> fList = Arrays.asList(fsFiles); fsFiles是一个File类型的数组。
+fList.forEach((File f) -> System.out.println(f.getName()));
+也可以直接用下面的方式
+fList.forEach(System.out::println)
+
+
+Predicate。可以理解为条件表达式。 
+Stream。可以理解为集合类的增强版。
+
+public class EmployeePredicates {
+	public static Predicate<Employee> isAdultMale() {
+		return p -> p.getAge() > 21 && p.getGender().equalsIgnoreCase("M");
+	}
+
+	public static Predicate<Employee> isAdultFemale() {
+		return p -> p.getAge() > 18 && p.getGender().equalsIgnoreCase("F");
+	}
+
+	public static Predicate<Employee> isAgeMoreThan(Integer age) {
+		return p -> p.getAge() > age;
+	}
+
+	public static List<Employee> filterEmployees(List<Employee> employees, Predicate<Employee> predicate) {
+		return employees.stream().filter(predicate).collect(Collectors.toList());
+	} // filter->接受一个断言（返回true or false 的lambda表达式），过滤出需要的内容。map和filter的区别，map函数可以不作条件判断直接返回计算结果。
+}
+
+package com.wang.lambda;
+
+public class Employee {
+
+	public Employee(Integer id, Integer age, String gender, String fName, String lName) {
+		this.id = id;
+		this.age = age;
+		this.gender = gender;
+		this.firstName = fName;
+		this.lastName = lName;
+	}
+
+	private Integer id;
+	private Integer age;
+	private String gender;
+	private String firstName;
+	private String lastName;
+
+	// Please generate Getter and Setters
+
+	@Override
+	public String toString() {
+		return this.id.toString() + "# " +lastName+" age: "+ this.age.toString(); // To change
+	}
+	TODO setter and getter
+}
+
+public class TestEmployeePredicates {
+    public static void main(String[] args){
+        Employee e1 = new Employee(1,23,"M","Rick","Beethovan");
+        Employee e2 = new Employee(2,13,"F","Martina","Hengis");
+        Employee e3 = new Employee(3,43,"M","Ricky","Martin");
+        Employee e4 = new Employee(4,26,"M","Jon","Lowman");
+        Employee e5 = new Employee(5,19,"F","Cristine","Maria");
+        Employee e6 = new Employee(6,15,"M","David","Feezor");
+        Employee e7 = new Employee(7,68,"F","Melissa","Roy");
+        Employee e8 = new Employee(8,79,"M","Alex","Gussin");
+        Employee e9 = new Employee(9,15,"F","Neetu","Singh");
+        Employee e10 = new Employee(10,45,"M","Naveen","Jain");
+         
+        List<Employee> employees = new ArrayList<Employee>();
+        employees.addAll(Arrays.asList(new Employee[]{e1,e2,e3,e4,e5,e6,e7,e8,e9,e10}));
+                
+        System.out.println(EmployeePredicates.filterEmployees(employees, EmployeePredicates.isAdultMale()));
+         
+        System.out.println(EmployeePredicates.filterEmployees(employees, EmployeePredicates.isAdultFemale()));
+         
+        System.out.println(EmployeePredicates.filterEmployees(employees, EmployeePredicates.isAgeMoreThan(35)));
+         
+        //Employees other than above collection of "isAgeMoreThan(35)" can be get using negate()
+        System.out.println(EmployeePredicates.filterEmployees(employees, EmployeePredicates.isAgeMoreThan(35).negate()));
+    }
+}
+ 
