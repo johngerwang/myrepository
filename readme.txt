@@ -8,3 +8,5 @@ back to hangzhou
 stupid boss still prefers the svn
 
 git checkout -b dev
+
+Creating a new branch is quick AND simple.
