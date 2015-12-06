@@ -6,3 +6,5 @@ Git tracks changes of files.
 go to nanjing
 back to hangzhou
 stupid boss still prefers the svn
+
+git checkout -b dev
