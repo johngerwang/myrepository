@@ -9,4 +9,9 @@ stupid boss still prefers the svn
 
 git checkout -b dev
 
-Creating a new branch is quick & simple.
+<<<<<<< HEAD
+Creating a new branch is quick AND simple.
+=======
+Creating a new branch is quick AND simple.
+Creating a new branch is quick AND simple.
+>>>>>>> feature1
