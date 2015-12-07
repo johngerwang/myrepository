@@ -2,3 +2,22 @@ Git is a version control system.
 Git is free software.
 Git is a distributed version control system.
 Git is free software.
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+
+git checkout -- test.txt
+撤销工作区的内容,恢复到版本库中最新的内容。如果已经提交到暂存区的话，则该命令无效果。
+
+git diff HEAD -- test.txt
+用工作区/暂存区的内容和版本库中最新的内容做比较
+
+git reset --hard <HEAD~?>|<commitid>  ?->number
+之前的提交(commit)的内容都被撤销，工作区和暂存区中都撤销
+
+git reset --soft <HEAD~?>|<commitid>  ?->number
+之前的提交(commit)的内容都被撤销，工作区和暂存区中依然存在
+
+git reset --mixed <HEAD~?>|<commitid>  ?->number     mixed为默认的模式
+之前的提交(commit)的内容都被撤销，工作区不撤销，暂存区中撤销
+
+test
