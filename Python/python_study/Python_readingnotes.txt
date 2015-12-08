@@ -240,11 +240,154 @@ list和tuple和String也一样，可以通过第一种方式迭代。
 如何判断一个对象是否是可以迭代
 from collections import Iterable
 isinstance(x,Iteratable)
+isinstance("123", Iterable) 
+isinstance([1,2,3], Iterable) true
+isinstance(123, Iterable) false
 
 获取index和value，使用enumerate方法。；
-for i, value in enumerate(['A', 'B', 'C']):
+for i, value in enumerate(['A', 'B', 'C']):   或者for i, value in enumerate(('A', 'B', 'C')):
     print(i,value)
 
+for x, y in [(1, 1), (2, 4), (3, 9)]:
+    print(x,y)
+
+21.列表生成式
+简单的生成一个1~10的list。l = list(range(1, 11))  -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+稍微复杂，生成一个x*x的列表。[x*x for x in range(1,11)] ->[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+增加条件表达式。l = [x*x for x in range(1,11) if x%2==0] ->[4, 16, 36, 64, 100]
+两层循环。l = [x*y for x in range(1,4) for y in range(2,5)] -> [2, 3, 4, 4, 6, 8, 6, 9, 12]
+例子，获取当前路径下的所有目录 import os [dir for dir in os.listdir('.')] 
+大写转小写。L = ['Hello', 'World', 'IBM', 'Apple']  l = [s.lower() for s in L] ->['hello', 'world', 'ibm', 'apple']
+获得所有的字符串(过滤掉非字符串)L = ['Hello', 'World', 18, 'Apple', None]  l = [s.lower() for s in L if isinstance(s,str)]  ->['hello', 'world', 'apple']
+
+22.生成器。generator
+generator用于保存的是生成符合某一种算法，所以利用generator可以生成符合某种算法的数据。
+generator与列表生成器的区别是，列表生成器使用的[]方括号，将方括号换成()圆括号即可。
+gen = (x*x for x in range(1,11))  next(gen)3次后输出数据为1,4,9。注意在使用generator时是使用next方法返回数据的。当越界后，抛出StopIteration异常。
+也可以通过  for x in gen 的方式来返回数据，这样方式就不会抛出StopIteration异常。
+使用yield关键字生成generator。yield返回后，下一次调用next方法时，从yield返回处开始执行。如下方法返回斐波那契数列。
+def fibo(max):
+    a,b,count = 0,1,0;
+    while count < max:
+        yield(b)
+        a,b = b,a+b  ->注意，此处当a=b，如等于1后，后面的a依然=0。跟a=b b=a+b语句不相等。
+        count = count+1
+    return 'done'  
+	
+	gen = fibo(9)
+	while true:
+		try:
+			print(next(g)
+		except StopIteration as si
+			print(si.value)  ->当作为生成器使用时，如果要获得return的值，则必须通过StopIteration异常获取。
+			break
+对于函数改成的generator来说，遇到return语句或者执行到函数体最后一行语句，就是结束generator的指令，for/while循环随之结束。
+
+22.迭代器(Iterable)
+使用isinstance(x,Iterable)判断是否是可迭代的。可以直接作用于for的对象，都是可迭代的。
+from collections import Iterable
+print(isinstance([], Iterable)) ->True
+print(isinstance({}, Iterable)) ->True
+print(isinstance("str", Iterable)) ->True
+print(isinstance((), Iterable)) ->True
+print(isinstance((x for x in range(1,10)), Iterable)) ->True
+使用isinstance(x,Iterator)判断是否是可迭代对象。能够使用next方法返回数据的对象都是Iterator对象。它们表示一个惰性计算的序列
+list、dict、str等数据类型不是Iterator。
+Iterator对象表示的是一个数据流，Iterator对象可以被next()函数调用并不断返回下一个数据，直到没有数据时抛出StopIteration错误。
+如果要讲list、dict、str,set等数据类型转换成Iterator，则需要使用iter方法，如iter([]),此时print(isinstance(iter([]), Iterator)) ->True
+将Iterator对象转换成Iterable对象。如R是Iterator对象，转换成List的方法是list(R)
+
+23.函数式编程
+函数名其实就是一个指向函数实现的代码的一个指针。
+def add(x,y,f):
+    return f(x)+f(y)
+result = add(-5,-6,abs) ->10
+
+map函数。
+将square函数作用于list的各元素上。
+def square(x):
+    return x*x
+r = map(square,[1,2,3,4]) 
+print(r)  -> <map object at 0x00624810> 此处r是一个Iterator对象。
+print(list(r)) ->1,4,9,16，将Iterator对象转换成Iterable对象。
+将list的元素变成字符。
+l = list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))  ->str是数据类型
+
+reduce函数。与map的返回不同，reduce返回一个值。
+reduce把结果继续和序列的下一个元素做累积计算。必须接收两个参数。
+格式：reduce(f, [x1, x2, x3, x4]) 相当于f(f(f(x1, x2), x3), x4)
+将单个数字，转换成一个数据。
+from _functools import reduce
+def fun(x,y):
+    return x*10+y
+print(reduce(fun,[1,2,3])) ->123
+讲字符串转变成数字
+def char2num(s):
+    return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s]
+print(reduce(fun,map(char2num,"12345"))) ->12345
+再简化
+def strtoint(s):
+    return reduce(lambda x, y: x * 10 + y, map(lambda z:{'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[z], s))
+
+使用lambda表达式简化fun方法
+def strtoint(s):
+    return reduce(lambda x, y: x * 10 + y, map(char2num, s))
+	
+也可以转换成一个方法来实现
+def str2int(s):
+    def fn(x, y):
+        return x * 10 + y
+    def char2num(s):
+        return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s]
+    return reduce(fn, map(char2num, s))
+	
+将首字母变成大写，接下来的字母变成小写。
+def lowerUpper(string):
+    if len(string) >2:
+        string = string.upper()
+        firstChar = string[0]
+        leftChar = string[1:].lower()
+        return firstChar+leftChar
+print(list(map(lowerUpper,['adam', 'LISA', 'barT'])))   -> ['Adam', 'Lisa', 'Bart']
+
+def multipy(x,y):
+    return x*y
+print(reduce(multipy,[1,2,3,4,5])) ->120
 
 
+用filter求素数
 
+计算素数的一个方法是埃氏筛法，它的算法理解起来非常简单：
+
+首先，列出从2开始的所有自然数，构造一个序列：
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...
+取序列的第一个数2，它一定是素数，然后用2把序列的2的倍数筛掉：
+3, 5, 7, 9, 11,13, 15, 17,  19, ...
+取新序列的第一个数3，它一定是素数，然后用3把序列的3的倍数筛掉：
+5, 7, 11,  13, 17,  19, ...
+取新序的第一个数5，然后用5把序列的5的倍数筛掉：
+7, 11,  13, 17,  19, ...
+不断筛下去，就可以得到所有的素数。
+用Python来实现这个算法，可以先构造一个从3开始的奇数序列：
+def intgen(): #3开始的奇数序列
+    start = 1
+    while True:
+        start = start+2
+        yield start
+        
+def disable(n):
+    return lambda x:x%n>0
+
+def primes():
+    yield 2
+    it = intgen()
+    while True:
+        n = next(it)
+        yield n
+        it = filter(disable(n),it)
+
+for n in primes():
+    if n < 100:
+        print(n)
+    else:
+        break
