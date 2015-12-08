@@ -106,8 +106,8 @@ print("%d%%" %7)
 长度。跟List一样。
 
 14.set
-集合。跟List的区别是set的元素不可重复。无序。
-定义。s=([1,2,3]),使用圆括号，必须使用list或者string作为输入,使用set关键字。如果有重复元素，那么重复的元素会被过滤掉。如s=set([1,1,2,2,3,3,3]),输出的只有1,2,3。
+集合。跟List的区别是set的元素不可重复。无序。只能存入不可变对象。
+定义。s=set([1,2,3]),使用圆括号，必须使用list或者string作为输入,使用set关键字。如果有重复元素，那么重复的元素会被过滤掉。如s=set([1,1,2,2,3,3,3]),输出的只有1,2,3。
 增。s.add(4)。将整数4添加到set中。如果有重复的元素被添加，则无视。
 删。s.remove(2)。删除元素2。如果不存在，则KeyError: 4
 查。???
@@ -116,5 +116,135 @@ print("%d%%" %7)
 差集。将2个set中的重复元素删除，获得前一个set剩余的元素。s1 = set([1,2,3,4])  s2 = set([1,2,3,5])  s1-s2 ->4。也可使用方法：s1.difference(s2) 
 对称差集。获得2个set中各自不存在对方set中的元素。s1 = set([1,2,3,4])  s2 = set([1,2,3,5])    s1^s2 -> 4,5。也可使用方法：s1.symmetric_difference(s2)
 长度。s.len()
+
+
+14.数据类型转换函数
+print(int("123"))
+print(int(12.34))
+print(float('12.34'))
+print(str(123))
+print(bool('')) ->空，当成False。
+print(bool(1))->非空，当成True。
+
+15.函数
+定义方法。关键字def，函数名，参数，以冒号结尾，如。如def fun(a,b): 。遇到return，则返回。没有return，则默认返回None。
+pass。使用pass作为占位符。当未确定方法的内容时，可以使用该占位符，否则方法运行时会出错。
+return多个值。如myfun()方法有return x,y。调用返回多个值的方法时可以x,y = myfun()。其实返回多个值的时候实际上返回的是一个tuple，只是为了书写方便不会明确写成tuple的样子。
+参数。可以定义默认参数，可变参数，关键字参数。
+    ■默认参数。其中n=2，即为默认参数，当调用default_para_fun(5)，即不传入n的值的时候，使用默认参数的值。使用默认参数，可以降低调用难度。某种程度上相当于方法重载的概念。
+		def default_para_fun(x,n=2):
+			result = 1;
+			while n>0:
+				n = n-1
+				result = result*n
+			return result
+	注意：1.默认参数放在参数列表的最后面。2.把变化大的参数放在前面，变小的参数放在后面作为默认参数。	
+	3.当有多个默认参数的时候，调用方法时可以不按照出现的顺序，但是必须指定参数名（且必须和方法定义的参数名一致）
+	def user_profile(name,sex,city='nj',age=6):
+		print(name,sex,city,age)
+    user_profile('wang', 'M', age=33)
+	4.注意默认参数是否可变变量。如List这样的可变对象，则List的值会被保存下来。
+	如下方法，当初次使用默认参数时，L的值是['end']，当再次调用的时候，就变成['end', 'end']，因为L变量已经在内存中保存下来了，再次修改时直接使用已经保存了(end)的L。
+		def add_end(L=[]):
+			L.append('end')
+			return L   
+	print(add_end([1,2,3])) ->[1, 2, 3, 'end']
+	print(add_end([4,5,6])) ->[4, 5, 6, 'end']
+	print(add_end())        ->['end']
+	print(add_end())        ->['end', 'end']
+	所以，尽量使用非可变对象。及时一定要用可变对象，那么最好像如下定义。
+		def add_end1(L=None):
+			if L is None:
+				L = []
+			L.append('end')
+			return L
+		print(add_end1())   ->['end']
+		print(add_end1())   ->['end']
+	■可变参数。可以传入0个至N个参数。使用可变参数，可以简化原来必须要用List或者Tuple的来调用的方法的定义。只要在参数前加上"*"符号。实际上就是传了一个Tuple。
+	 def summ(*number):
+		s = 0
+		for n in number:
+			s = n+s
+		return s
+	print(summ(1,2,3,3)) ->9
+
+	ll = [1,2,3,4]
+	print(summ(*ll)) ->10 当已经有一个现成的List或者Tuple时，可以在List或者Tuple前加"*"，传入具有可变参数的方法时，该传入参数就变成可变参数了。
+	 
+	■关键字(key-value)参数。可以传入若干含有参数名和参数值的pair，在该方法内部被转换成dict。
+	定义形式**KW。需要2个星号"*"。
+	def person(name,sex,**kw):
+    print(name,sex,kw)
+    person('wang', 'M')  -> wang M {}。关键字参数也可以不传入。
+	person('wang', 'M', age=33,city="nj")  -> wang M {'city': 'nj', 'age': 33}
+	
+	profile ={"age":33,"city":"nj"}
+	person('wang', 'M', **profile)  -> wang M {'city': 'nj', 'age': 33}，当已经存在一个dict时，可以在该dict前面直接加**，使它变成关键字参数。
+	注意：在person方法中获得传入的profile只是获得的一个dict的拷贝，对profile操作，不会影响方法外profile的值。
+	限制关键字参数(命名关键字参数)。使用*占位符来分隔。
+	def person_profile(name,sex,*,age=6,city):
+    print(name,sex,age,city)
+    person_profile('wang', 'M', city='nj')  -> wang M {'city': 'nj', 'age': 33}
+	多了少了参数都不行，必须出现所有限定的关键词。否则报错。
+	person_profile('wang', 'M', city='nj',address='jn')   ->TypeError: person_profile() got an unexpected keyword argument 'address'
+	person_profile('wang', 'M')    ->TypeError: person_profile() missing 1 required keyword-only argument: 'city'
+	■参数组合。在函数定义中可以使用必选参数，默认参数，可变参数，关键字参数，限制（命名）关键字参数。顺序也是如左述。
+	注意，可变参数和命名关键字参数不可同时使用。WHY？？？？？？
+	def para_mix(name,sex,city='nj',postcode=123,*args,**kw):
+		print(name,sex,city,postcode,args,kw)
+		
+	arg = [1,2,3]
+	para_mix('wang','M','nj',234,*arg)-> wang M nj 234 (1, 2, 3) {}
+	注意：当对默认参数和可变参数同时使用时，如果传入了参数名，则会报错,WHY????
+	para_mix('wang','M',postcode=234,*arg) ->TypeError: para_mix() got multiple values for argument 'postcode'
+	
+	所有的函数都可以通过传入List\tuple和dict，即以fun(*arg,**kw)的形式来调用,而无需其他参数。
+	args=('wangqiang','M','other','234',2323)
+	kws={"address":"jn"}
+	para_mix(*args,**kw)->wangqiang M other 234 (2323,) {'address': 'jn'} 必须要先满足前面位置的参数，否则匹配会错位。
+	
+16.not isinstance(x, (int, float))
+判断x，是否是int，float类型的。 (int, float)->是tuple类型。
+
+17.抛出异常
+使用raise关键字。 raise TypeError('bad operand type')
+
+18.导入模块或者方法
+使用from和import关键字。如from abstest import my_abs，导入abstest.py的my_abs方法。
+import abstest，表示导入abstest模块的所有的方法。
+
+
+19.切片(Slice)
+L = ["micheal","kate","tom","lilei"]
+L[0:3] ->['micheal', 'kate', 'tom']
+L[:3]->['micheal', 'kate', 'tom'] 省略index 0 。
+L[-1] -> lilei
+L[-2:] ->['tom', 'lilei'] 获取倒数第2个到倒数第1个元素，可以省略-1
+L[-2,-1] ->['tom', 'lilei']
+L[::2] ->['micheal', 'tom']，每2个取一个。
+L[:] -> ["micheal","kate","tom","lilei"]。获得所有元素
+以上是使用list的例子。Tuple和String也是一样的。dict不可。
+
+
+20.迭代
+dic = {'a': 1, 'b': 2, 'c': 3}
+for key in dic:
+    print(key)  ->默认获得key
+获得value    
+for value in dic.values():
+    print(value)
+获得k,v
+for k,v in dic.items():
+    print(k,v)
+list和tuple和String也一样，可以通过第一种方式迭代。
+如何判断一个对象是否是可以迭代
+from collections import Iterable
+isinstance(x,Iteratable)
+
+获取index和value，使用enumerate方法。；
+for i, value in enumerate(['A', 'B', 'C']):
+    print(i,value)
+
+
 
 
