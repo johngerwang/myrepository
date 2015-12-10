@@ -81,3 +81,41 @@ for n in primes():
         print(n)
     else:
         break
+    
+print(sorted([-5,-10,23,1,2,3],key=abs))
+
+def lazy_sum(*args):
+    def sum():
+        result = 0
+        for i in args:
+            result = result+i
+        return result
+    return sum
+f1=lazy_sum(*[1,2,3])
+f2=lazy_sum(*[1,2,3])
+print(f1())
+print(f2())
+
+def count1():
+    fs = []
+    for i in range(1, 4):
+        def f():
+            return i*i
+        fs.append(f)
+    return fs
+
+f1, f2, f3 = count1()
+print(f1(),f2(),f3())
+
+def count(*args):
+    def f(i):
+        def g():
+            return i*i
+        return g 
+    fs = []
+    for i in args:
+        fs.append(f(i))
+    return fs
+args = [1,2,3]
+f1, f2, f3 = count(*args)
+print(f1(),f2(),f3())

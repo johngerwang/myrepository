@@ -391,3 +391,119 @@ for n in primes():
         print(n)
     else:
         break
+
+		
+sorted函数
+定义方法。sorted([x,x,x,x,x],key=fun,reverse=true|false)默认为false。
+
+
+返回函数
+def lazy_sum(*args):->使用了可变长参数。
+    def sum():
+        result = 0
+        for i in args:
+            result = result+i
+            return result
+    return sum
+将函数赋值给f。f=lazy_sum((1,2,3))或者 f=lazy_sum(*[1,2,3])-><function lazy_sum.<locals>.sum at 0x001BA150>
+调用该函数输出f()  ->6
+可知，内部的sum函数可以引用外部lazy_sum的参数args
+当lazy_sum返回函数sum时，相关参数和变量都保存在返回的函数中，这种称为“闭包（Closure）”的程序结构拥有极大的威力。
+需要注意：下面这个函数的返回中，包含了循环变量i，最终执行f1(),f2(),f3()的时候返回的值是一样的，都是9。
+原因是，变量i被函数f1(),f2(),f3()引用了，而当f1(),f2(),f3()执行的时候，i的值已经变成了3。
+def count():
+    fs = []
+    for i in range(1, 4):
+        def f():
+             return i*i
+        fs.append(f)
+    return fs
+
+f1, f2, f3 = count() ->注意此种赋值方式，list可以这样赋值的。。
+
+解决办法。新定义一个方法f，用该函数的参数绑定循环变量当前的值，无论该循环变量后续如何更改，已绑定到函数参数的值不变。
+def count(*args)
+	def f(i)
+		def g()
+			return i*i
+		return g 
+	fs = []
+	for i in args
+		fs.append(f(i))
+	return fs
+f1, f2, f3 = count()
+
+
+lambda表达式（也可以称作匿名函数）
+定义形式：lambda 参数：表达式。只能有一个表达式，不用写return，返回值就是该表达式的结果。
+f = lambda x : x*x
+print(f) -><function <lambda> at 0x02185150>
+print(f(2)) ->4
+
+AOP/装饰器：在方法被执行前调用。
+import functools  
+def log(fun):
+    @functools.wraps(fun)
+    def wrapper(*arg,**kw):
+        print(fun.__name__ + "  is called")
+        return fun(*arg,**kw)  ->如果只被now用，那么形参不需要这样，直接一个参数就行。此处是通用的写法，即该log可以被任何的函数使用。
+    return wrapper
+@log
+def now(txt):
+    print(txt)
+now("hello")
+#相当于
+now = log(now("hello"))
+
+当需要装饰器有参数传入的情况下，需要再包装一层函数
+def log_para(text):
+    def decorator(fun):
+        def wrapper(*arg,**kw):
+            print(fun.__name__ + "  is called and will be " +text)
+            return fun(*arg,**kw)
+        return wrapper
+    return decorator
+
+@log_para("execute")
+def now1(txt):
+    print(txt)
+now1("aab")
+now = log_para("execute")(now1("hello"))
+
+偏函数
+使用functools.partial把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数。
+int2= functools.partial(int,base=2)
+#2进制转换成10进制
+print(int2("10010"))  ->18
+相当于
+kw = { 'base': 2 }
+int('10010', **kw)
+
+模块
+python的模块名：包名+模块名。各模块下一定需要有一个__init__.py文件,否则python不认为这个目录是一个包。
+
+使用模块
+使用import导入该模块即可。
+import sys
+__author__ ="wang"
+def test():
+    args = sys.argv
+    if len(args)==1:   ->注意，参数的编号是以python命令开始的，即python文件是args[0]，以此类推。
+        print("hello")
+    elif len(args)==2:
+        print("hello " + args[1])
+    else:
+        print("too many args")
+
+if __name__ == '__main__':
+    test()
+
+作用域
+Python中没有办法可以限制访问函数或者变量，但是一般来说约定如下
+"_","__"1个或者2个下划线开头的变量或者函数，”不应该“直接去访问
+__XXX__是特殊变量。如__author__，__name__,__doc__等
+
+
+第三方库
+pypi.python.org，可以从该网站查询，一般都会在该网站上注册
+第三方库还有MySQL的驱动：mysql-connector-python，用于科学计算的NumPy库：numpy，用于生成文本的模板工具Jinja2，图片处理：Pillow和PIL（Python Imaging Library0等等
