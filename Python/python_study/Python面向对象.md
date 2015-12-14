@@ -45,7 +45,8 @@
 	test_run(Animal())
 	test_run(Person())
 
-10.使用type()放回对象的class类型，注意，一切都是对象。
+10.使用type()返回对象的class类型，如果是对类执行type函数，则返回type，class的类型是type。
+注意，一切都是对象。
 	
 	import types
 	def fn():
@@ -198,7 +199,7 @@
 		f = Fib()
 		f[0:5]   #以切片的形式[1, 1, 2, 3, 5]
 
-20.调用对象。在类中实现\_\_call\_\_()方法后，直接调用对象就是调用\_\_call\_\_()方法。
+20.调用实例对象。在类中实现\_\_call\_\_()方法后，直接调用对象就是调用\_\_call\_\_()方法。
 
 	class Student(object):
     	def __init__(self, name):
@@ -223,5 +224,228 @@
 	False
 	>>> callable('str')
 	False
+
+21.枚举.使用Enum。
+	
+	form enum import Enum
+	
+	Month  = Enum('month',('jan','feb','mar','apr','may','jun'))
+	print(Month.jan.value) ->1。使用value属性获得值。默认可以从1开始计数。如果需要自定义，需要集成Enum类。
+	for name, member in Month.__members__.items():
+    	print(name, '=>', member, ',', member.value)
+
+	jan => month.jan , 1
+	feb => month.feb , 2
+	。。。
+	jun => month.jun , 6
+
+22.动态语言与静态语言最大的区别是，动态语言的函数/类/方法的定义是在运行时创建的，而不是编译时期确定的。
+class的创建是通过type()函数来完成的，相当于在解释执行时，python解释器扫描class的定义，然后调用type()函数来完成类型的创建。以下是从另一个侧面来证明该说明。
+	
+	def fun(self,name="wang"):
+		print("hello",name)
+
+	Hello = type('Hello',(object,),dict(hello=fun))
+	h = Hello()
+	h.hello("qiang")  #hello qiang
+	print(type(h))  #<class '__main__.Hello'>
+	print(type(Hello)) #<class 'type'>
+	
+type()函数定义。第一个参数：类名。第二个参数：必须得是一个tuple，里面是类的父类。第三个参数，必须是一个dict，定义方法。
+通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。
+
+23.try...except...finally。当需要捕获异常时可以使用该语法。finally中的语句一定会被执行，不管是否有异常发生。如下列子。注意：所以异常的超级父类是BaseExpcetion。
+
+	import logging
+	
+	try:
+    	print('try...')
+    	r = 10 / int('2')
+    	print('result:', r)
+	except ValueError as e:  #注意，有一个as关键字
+    	print('ValueError:', e)
+    	raise XXXError #也可以在此处再次向上抛出异常，由上层处理。如果不明确定异常类型，则还是抛出ValueError。
+	except ZeroDivisionError as e:
+    	print('ZeroDivisionError:', e)
+    	logging.exception(e)	
+	else:  #如果没有错误发生，可以在except语句块后面加一个else，当没有错误发生时，会自动执行else语句：
+    	print('no error!')
+	finally:
+    	print('finally...')
+	print('END')
+当发生异常时，执行完finally后就不再往下执行了，但是如果使用logging，则可以将异常信息收集到，并继续往下执行。比如上例中，当发生除0异常时，最后面的print('END')依然可以被执行。
+
+注意：我们明明已经捕获了错误，但是，打印一个ValueError!后，又把错误通过raise语句抛出去了，这不有病么？
+其实这种错误处理方式不但没病，而且相当常见。捕获错误目的只是记录一下，便于后续追踪。但是，由于当前函数不知道应该怎么处理该错误，所以，最恰当的方式是继续往上抛，让顶层调用者去处理。好比一个员工处理不了一个问题时，就把问题抛给他的老板，如果他的老板也处理不了，就一直往上抛，最终会抛给CEO去处理。
+
+24.断言(assert)。如果assert判断结果是false，则抛出AssertionError。可以通过这种方式调试代码，在执行的时候，通过-O选项，使之不执行。
+
+25.logging。可以将信息log到console。也可以设置级别，分别为info,debug,warnning,error
+
+	import logging
+	logging.basicConfig(level=logging.INFO)
+
+	
+26.单元测试（unittet）
+
+	class Dict(dict):
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+
+    def __getattr__(self, key):#以属性的形式取值
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
+
+    def __setattr__(self, key, value):  #以属性的形式赋值
+        self[key] = value
+
+	d = Dict(**{"a":1,"b":2})
+	d.a = 3
+	print(d.a)
+
+import unittest  #需要导入unitest模块
+
+class TestDict(unittest.TestCase): #需要继承unittest.TestCase
+
+    def setUp(self): #在所有的test执行开始之前执行
+        print('setUp...')
+
+    def tearDown(self): #在所有的test执行后执行
+        print('tearDown...')
+        
+    def test_init(self): #必须以test_开头，否则不被执行
+        d = Dict(**{"a":1,"b":2})
+        self.assertEqual(d['a'],1)  #使用self.assertXXXX在判断
+        self.assertEqual(d['b'],2)
+        self.assertEqual(d.a,1)
+        self.assertEqual(d.b,2)
+        self.assertTrue(isinstance(d, dict))
+        
+    def test_key(self):
+        d = Dict()
+        d['key']= "1"
+        self.assertEqual(d['key'],"1")
+        
+    def test_attr(self):
+        d = Dict()
+        d.key= "1"
+        self.assertEqual(d['key'],"1")
+        self.assertTrue('key' in d)
+        
+    def test_keyerror(self):
+        d = Dict()
+        with self.assertRaises(KeyError): #对异常抛出的判断，需要使用with self.assertRaises
+            value = d['empty']
+
+    def test_attrerror(self):
+        d = Dict()
+        with self.assertRaises(AttributeError):
+            value = d.empty
+            
+	if __name__ == '__main__':  
+   	 	unittest.main()#只有加了这一句，才会执行
+   	 	#也可以不用这一句，在命令行中python -m unittest 文件名(如mytest.py)
+
+27.基于注释的测试。python会按照命令的输入输出形式来执行对代码的测试。
+
+class Dict(dict):
+    '''
+    Simple dict but also support access as x.y style.
+
+    >>> d1 = Dict()
+    >>> d1['x'] = 100
+    >>> d1.x
+    100
+    >>> d1.y = 200
+    >>> d1['y']
+    200
+    >>> d2 = Dict(a=1, b=2, c='3')
+    >>> d2.c
+    '3'
+    >>> d2['empty']
+    Traceback (most recent call last):
+        ...
+    KeyError: 'empty'
+    >>> d2.empty
+    Traceback (most recent call last):
+        ...
+    AttributeError: 'Dict' object has no attribute 'empty'
+    '''
+    def __init__(self, **kw):
+        super(Dict, self).__init__(**kw)
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+	if __name__=='__main__':
+    	import doctest
+   	 	doctest.testmod()
+   
+28.python编码。python3对字符串默认使用unicode编码，即在内存中是unicode编码，此内部编码方式是一个桥梁。假设从文件中读取utf-8编码的内容到前台以gb2312来正常显示的话，必须经历utf-8->unicode->gb2312转换的过程。
+	
+	ff = open('1.txt,'rb') #假设1.txt是以utf-8编码的文件，内容为“中文”
+	bytes = ff.read()
+	print(bytes)  #此处时显示是utf-8编码形式的字节码，b'\xe4\xb8\xad\xe6\x96\x87'
+	print("string: " + chardet.detect(bytes)["encoding"] + " with confidence: " + 	str(chardet.detect(bytes)["confidence"]))
+	#string: utf-8 with confidence: 0.7525
+
+	a = bytes.decode('utf-8') #将utf-8解码成unicode类型的字节码
+	print(type(a)) #<class 'str'>
+	print(a)  #中文
+	b = a.encode('gb2312') #将unicode的字节码编码成gb2312的字符串
+	print(type(b) ) #<class 'bytes'>
+	print(b) #b'\xd6\xd0\xce\xc4'
+	
+29.json化与反json化
+	import json
+	class Student:
+    
+    	def __init__(self,name,age,sex):
+        	self.name = name
+        	self.sex = sex
+        	self.age = age
+        
+	def s2json(std):
+    	return {
+            'name':std.name,
+            'age':std.age,
+            'sex':std.sex
+            }
+
+	def json2std(json):
+    	return Student(json['name'],json['age'],json['sex'])
+
+	s = Student("wang",10,"M")
+	json_string = json.dumps(s,default=s2json) #需要一个转换函数
+	json_string = json.dumps(s,default=lambda x:x.__dict__) #使用__dict__获取所有的成员变量的名称与值，行成dict
+	print(json_string) #{"name": "wang", "sex": "M", "age": 10}
+	print("======", s.__dict__)
+    
+	s = json.loads(json_string,object_hook=json2std) #需要一个转换函数
+	#{"name": "wang", "sex": "M", "age": 10}
+
+30.序列化
+	import pickle
+	d = dict(name='Bob', age=20, score=88)
+
+	pickle.dumps(d)
+
+	f = open('3.txt','wb')
+	pickle.dump(d,f)
+	f.close()
+
+	f = open('3.txt','rb')
+	d = pickle.load(f)
+	f.close()
+	print(d)
 
 
