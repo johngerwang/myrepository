@@ -1,0 +1,70 @@
+Main.Thread Thread0's Status is NEW
+Main.Thread Thread1's Status is NEW
+Main.Thread Thread2's Status is NEW
+Main.Thread Thread3's Status is NEW
+=========================
+Main.Thread Name is Thread0
+Main.Thread ID is 9
+Main.Thread Priority is 10
+Main.Old State is NEW
+Main.New State is RUNNABLE
+=========================
+=========================
+Main.Thread Name is Thread1
+Main.Thread ID is 10
+Main.Thread Priority is 1
+Main.Old State is NEW
+Main.New State is BLOCKED
+=========================
+=========================
+Main.Thread Name is Thread2
+Main.Thread ID is 11
+Main.Thread Priority is 10
+Main.Old State is NEW
+Main.New State is BLOCKED
+=========================
+=========================
+Main.Thread Name is Thread3
+Main.Thread ID is 12
+Main.Thread Priority is 1
+Main.Old State is NEW
+Main.New State is BLOCKED
+=========================
+=========================
+Main.Thread Name is Thread0
+Main.Thread ID is 9
+Main.Thread Priority is 10
+Main.Old State is RUNNABLE
+Main.New State is BLOCKED
+=========================
+=========================
+Main.Thread Name is Thread2
+Main.Thread ID is 11
+Main.Thread Priority is 10
+Main.Old State is BLOCKED
+Main.New State is TERMINATED
+=========================
+=========================
+Main.Thread Name is Thread3
+Main.Thread ID is 12
+Main.Thread Priority is 1
+Main.Old State is BLOCKED
+Main.New State is TERMINATED
+=========================
+=========================
+Main.Thread Name is Thread0
+Main.Thread ID is 9
+Main.Thread Priority is 10
+Main.Old State is BLOCKED
+Main.New State is TERMINATED
+=========================
+=========================
+Main.Thread Name is Thread1
+Main.Thread ID is 10
+Main.Thread Priority is 1
+Main.Old State is BLOCKED
+Main.New State is TERMINATED
+=========================
+
+Tue Dec 15 19:50:34 CST 2015： Removed the event: Event [dt=Tue Dec 15 19:50:24 CST 2015, name=Thread[Thread-1,5,main]#9]
+
