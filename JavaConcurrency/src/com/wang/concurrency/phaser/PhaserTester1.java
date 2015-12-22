@@ -86,9 +86,9 @@ class FileSearcher implements Runnable {
 			return true;
 		}
 		System.out.println(Thread.currentThread().getName() + " : " +"Phase: "+phaser.getPhase()+ ". Results: " + results.size());
-		//该方法在phaser为终止状态时，会返回一个负数。如果可能会被终止状态，则应该要判断返回值，根据返回值来处理。	
-		//waitAdvance(int phase),当给定的phase与当前的phase一致时，进入休眠，直到本阶段所有线程执行完毕。否则，立即返回
 		
+		//该方法在phaser为终止状态时，下面的方法会返回一个负数。如果可能会被终止状态，则应该要判断返回值，根据返回值来处理。	
+		//waitAdvance(int phase),当给定的phase与当前的phase一致时，进入休眠，直到本阶段所有线程执行完毕。否则，立即返回
 		//arrive()，不等待其他线程，继续往下执行。
 		phaser.arriveAndAwaitAdvance(); //本例子中，phaser遇到3次该方法的调用后，才会继续执行后续动作。所以如果完成一个阶段后，每一个线程都得调用一次该方法。
 		return false;
