@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+//当Task停止时回调FutureTask的done()方法，
 public class FutureTasker {
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
@@ -14,6 +15,7 @@ public class FutureTasker {
 		ExecutorService es = Executors.newCachedThreadPool();
 		MyFutureTask[] mfts = new MyFutureTask[5];
 		for (int i = 0; i < 5; i++) {
+			//FutureTask需要包装Runnable对象，FutureTask也是一个Runnable对象。
 			mfts[i] = new MyFutureTask(new MyTask("task$" + i));
 			try {
 				TimeUnit.SECONDS.sleep(1);

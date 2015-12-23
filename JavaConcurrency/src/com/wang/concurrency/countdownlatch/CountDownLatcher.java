@@ -3,6 +3,7 @@ package com.wang.concurrency.countdownlatch;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+//当CountDownLatch计数为0时，程序才能往下走，否则因为CountDownLatch#await方法，始终等待
 public class CountDownLatcher {
 
 	public static void main(String[] args) throws InterruptedException {

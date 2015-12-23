@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+//使用CyclicBarrier类，使当所有的任务都完成时，才启动一个新的任务。任务数和新任务都是在该类的构造函数中定义的。
+//否则因CyclicBarrier#await()方法等待。好像是每次await()被调用，则计数-1
 public class CyclicBarrierTester {
 
 	public static void main(String[] args) throws InterruptedException {
