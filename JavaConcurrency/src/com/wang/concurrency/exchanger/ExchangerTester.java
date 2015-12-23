@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Exchanger;
 
+//通过Exchanger辅助类来交换数据。
+//主要是Exchanger的exchange()方法。执行到该方法后，线程等待，数据交换完毕后，继续执行
 public class ExchangerTester {
 
 	public static void main(String[] args) {
@@ -34,7 +36,7 @@ class Producer implements Runnable{
 		int cycle = 1;
 		for(int i =0;i<10;i++){
 			for(int j=0;j<5;j++){
-				buffer.add("Event#"+j);
+				buffer.add("Event#"+(i*10+j));
 			}
 			System.out.println("Producer: cycle#" +cycle+". Before Exchange,Producer buffer size: "+buffer.size());
 			try {
