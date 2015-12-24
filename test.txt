@@ -20,9 +20,4 @@ git reset --soft <HEAD~?>|<commitid>  ?->number
 git reset --mixed <HEAD~?>|<commitid>  ?->number     mixed为默认的模式
 之前的提交(commit)的内容都被撤销，工作区不撤销，暂存区中撤销
 
-test
-
-
-20151224
-
-aaaaaaaaaaaa
+new line 20151224
