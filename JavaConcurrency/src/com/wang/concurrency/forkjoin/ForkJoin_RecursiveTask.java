@@ -109,7 +109,7 @@ class DocumentTask extends RecursiveTask<Integer> {
 			int middle = (end + start) / 2;
 			DocumentTask dt1 = new DocumentTask(start, middle, word, document);
 			DocumentTask dt2 = new DocumentTask(middle, end, word, document);
-			invokeAll(dt1, dt2);// 同步的？所有的DocumentTask都完成后才能往下？
+			invokeAll(dt1, dt2);// 同步的。所有的DocumentTask都完成后才能往下。
 			try {
 				Integer result1 = dt1.get();
 				//System.out.println("DocumentTask.compute(1): " + result1);

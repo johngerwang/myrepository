@@ -10,11 +10,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * 使用Fork/Join框架，执行分而治之的任务。Fork是分解，Join是合并操作。Join可以理解为ForkJoinPool。Fork可以理解为RecursiveAction/RecursiveTask
  * 主任务：PriceIncreamentTask extends RecursiveAction，参考大小在该类的compute中根据实际情况设定，本例子中使用的是10。
- * 执行该主任务的线程叫做Worker Thread（工作者线程），该线程查找所有所有未被执行的任务,任务由RecursiveAction根据参考大小来分解。
+ * Worker Thread（工作者线程）：线程池中空闲的线程，该线程查找所有所有未被执行的任务,任务由RecursiveAction根据参考大小来分解。
  * 注意：不要在task中执行主任务。
  * 主任务分成若干个子任务，子任务完成后，主任务才完成。此时才join。
  * 和CyclicBarrier类似，但是这个Fork/Join框架更主动，更加自我管理，不需要自己去创建线程
  */
+
+//通过ForkJoinTask.isCompleteAbnormally()方法的返回值来判断是否有异常，通过ForkJoinTask.getException()方法获取抛出的异常，否则无法获知异常，或者说ForkJoinTask的异常不会在控制台上显示出来
 public class ForkJoin_RecursiveAction {
 
 	public static void main(String[] args) {
@@ -28,7 +30,7 @@ public class ForkJoin_RecursiveAction {
 		//此处也可以不使用RecursiveAction，使用Runnable对象也可以，但是使用了Runnable的话，就不会使用"工作窃取算法",窃取其他线程未完成的任务队列中的任务。
 		//此方法是异步的，即执行到该语句后，就往下执行，而invoke相关方法则是同步的，不执行完不能往下走。
 		//也可以使用invokeAll,invokeAny，但是只接受Callable类型参数。
-		fjp.execute(pit);
+		fjp.execute(pit);//异步，无返回值，而submit有返回值
 		do{
 			System.out.println("Main ForkJoinPool.getParallelism(): "+fjp.getParallelism());
 			System.out.println("Main ForkJoinPool.getActiveThreadCount(): " +fjp.getActiveThreadCount());
@@ -40,7 +42,7 @@ public class ForkJoin_RecursiveAction {
 				e.printStackTrace();
 			}
 		}while(!pit.isDone());
-		fjp.shutdown();
+		fjp.shutdown();//如果已经在运行，则关闭不了。只能关闭未运行的任务（已创建)
 		
 		for(int i=0;i<plist.size();i++){
 			if(plist.get(i).getPrice()!=12){
