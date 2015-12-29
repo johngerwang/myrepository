@@ -19,7 +19,8 @@ class CallableTask implements Callable<String>{
 
 public class ScheduleThreadPoolExecutorTester{
 	public static void main(String[] args){
-		scheduleAtFixedRate();
+		//scheduleAtFixedRate();
+		schedule();
 	}
 	
 	public static void schedule(){

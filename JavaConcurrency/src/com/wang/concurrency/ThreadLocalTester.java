@@ -2,6 +2,7 @@ package com.wang.concurrency;
 
 import java.util.Date;
 
+//ThreadLocal，每一个线程单独一个值，不共享。值是通过set和get方法来操作的。每一个线程开始时，都会通过initValue初始化一个值
 public class ThreadLocalTester {
 
 	public static void main(String[] args) {
