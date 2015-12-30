@@ -1,9 +1,0 @@
-Consumer0 Started
-Consumer2 Started
-Consumer2 read the buffer size: 0
-Consumer1 Started
-Consumer1 read the buffer size: 0
-Consumer0 read the buffer size: 0
-producer Started
-producer add line to buffer,size is: 1
-producer add line to buffer,size is: 2
