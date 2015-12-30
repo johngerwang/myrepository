@@ -1,4 +1,4 @@
-package com.wang.concurrency;
+package com.wang.concurrency.lock;
 
 import java.util.ArrayList;
 import java.util.Iterator;

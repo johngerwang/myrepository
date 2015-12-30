@@ -1,4 +1,4 @@
-package com.wang.concurrency;
+package com.wang.concurrency.lock;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
