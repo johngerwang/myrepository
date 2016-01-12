@@ -25,6 +25,9 @@ public class Crime {
 		return mId;
 	}
 
+	public Date getDate(){
+		return mDate;
+	}
 	public String getmDate() {
 		CharSequence cs = DateFormat.format("EEEE, MMMM dd, yyyy h:mmaa", mDate);
 		return cs.toString();

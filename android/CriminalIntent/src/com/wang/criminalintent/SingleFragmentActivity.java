@@ -1,21 +1,21 @@
 package com.wang.criminalintent;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public abstract class SingleFragmentActivity extends Activity {
+public abstract class SingleFragmentActivity extends FragmentActivity {
 
 	protected abstract Fragment createFragment();
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {// 处于pre创建阶段，直到onCreateView后activity才真的创建出来（但是处于停止状态)
+	public void onCreate(Bundle savedInstanceState) {// 处于pre创建阶段，直到onCreateView后activity才真的创建出来（但是处于停止状态)
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fragment);
-		FragmentManager fm = this.getFragmentManager();
+		FragmentManager fm = this.getSupportFragmentManager();
 		// 如果fragment队列中中已经存在，则直接返回。为什么会队列中存在呢，因为该Activity会因设备的旋转或者内存被销毁
 		// 而重建，重建时会调用onCreate()方法。而销毁时，FragmentManager将会保存fragment队列。
 		// FragmentManager中持有该fragment的队列。

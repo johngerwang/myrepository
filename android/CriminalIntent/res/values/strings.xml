@@ -8,4 +8,5 @@
 	<string name ="crime_details_label">Details</string>
 	<string name="crime_solved_label">Sovled</string>
 	<string name = "crimes_title">Crimes</string>
+	<string name ="date_picker_title">Date of Crime</string>
 </resources>

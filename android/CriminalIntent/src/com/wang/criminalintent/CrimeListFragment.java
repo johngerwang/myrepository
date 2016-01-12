@@ -2,9 +2,9 @@ package com.wang.criminalintent;
 
 import java.util.ArrayList;
 
-import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +40,6 @@ public class CrimeListFragment extends ListFragment {
 		setListAdapter(adapter);
 	}
 
-	@SuppressWarnings("unused")
 	private class CrimeArrayAdapter extends ArrayAdapter<Crime>{
 
 		public CrimeArrayAdapter(ArrayList<Crime> objects) {
@@ -64,13 +63,33 @@ public class CrimeListFragment extends ListFragment {
 				return convertView;
 			}
 		}
-	
+	private static final int REQUEST_CRIME = 1;
+
 	@Override
 	public void onListItemClick(ListView l ,View v ,int position,long id){
 		Crime c =((CrimeArrayAdapter)getListAdapter()).getItem(position);
-		Intent i = new Intent(getActivity(),CrimeActivity.class);
+		Intent i = new Intent(getActivity(),CrimePagerActivity.class);
 		i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getmId());
-		startActivity(i);//此处相当于调用了（后台）Activity.startActivity()方法
+		//startActivity(i);//此处相当于调用了（后台）Activity.startActivity()方法
+		startActivityForResult(i,REQUEST_CRIME);
 		Log.d(TAG, c.getmTitle()+" was clicked.Id is " + id);
+	}
+	//为什么选择覆盖onResume()方法来刷新列表项显示，而非onStart()方法呢？当一个activity位于我们的activity之前时，
+	//我们无法保证自己的activity是否会被停止。如前面的activity是透明的，则我们的activity可能只会被暂停。
+	//对于此场景下暂停的activity，onStart()方法中的更新代码是不会起作用的。一般来说，要保证fragment视图得到刷新，在onResume()方法内更新代码是最安全的选择。
+	@Override
+	public void onResume(){
+		super.onResume();
+		((CrimeArrayAdapter)this.getListAdapter()).notifyDataSetChanged();
+	}
+	//	activity可以返回结果，fragment能够从activity中接收返回结果。
+	//	但是fragment无法返回结果，Fragment有自己的startActivityForResult(...)和onActivityResult(...)方法。
+	
+	@Override
+	public void onActivityResult(int requestCode,int resultCode,Intent intent){
+		if(REQUEST_CRIME==requestCode){
+			
+		}
+		
 	}
 }
