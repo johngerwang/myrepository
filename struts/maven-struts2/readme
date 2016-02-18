@@ -1,0 +1,13 @@
+refer to  the process.png
+
+1.Users type in the path: http://localhost:8080/maven-struts2
+2.According to the above configuration on web.xml welcome page login.jsp page will be opened up. 
+3.Users type in username & password then click Login 
+	3.1 Action named "login" is executed. 
+	3.2 The program will search for the configuration in struts.xml action suit seeking behavior of your history (action named "login"). 
+4.Method LoginAction#execute () in LoginAction will be called, this method returns a String 
+	Or returns "success" 
+	Or return the "error" 
+5.Program in the struts.xml to search page returns the String value is returned in the previous step. 
+6.The page site is returned to the user.
+

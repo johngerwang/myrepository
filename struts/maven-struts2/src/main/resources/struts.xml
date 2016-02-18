@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+  "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+  "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+<!-- 	默认条件下，在浏览器输入indexAction!execute.action，便会执行indexAction类里的execute方法， -->
+<!-- 	这样虽然方便，但可能带来安全隐患，通过url可以执行Action中的任意方法,想要禁止调用动态方法。 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	<!-- 指向resources目录下的ApplicationResources.properties文件 -->
+	<constant name="struts.custom.i18n.resources" value="ApplicationResources" />
+
+	<!-- 此处namespace为/，action名为login，所以当url中有/login出现时会调用LoginAction的execute来处理 -->
+	<package name="default" namespace="/" extends="struts-default">
+		<action name="login"
+			class="com.maven.struts2.LoginAction">
+			<result name="success">/WEB-INF/pages/UserInfo.jsp</result>
+			<result name="error">/WEB-INF/pages/Login.jsp</result>
+		</action>
+	</package>
+</struts>
