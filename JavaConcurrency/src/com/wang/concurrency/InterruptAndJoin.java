@@ -18,6 +18,7 @@ class Sleeper extends Thread {
 			TimeUnit.MILLISECONDS.sleep(duration);
 			System.out.println(getName() + " is asleep.");
 		} catch (InterruptedException e) {
+			//当打断后，被异常捕获后，isInterrupted()就不会输出true了。
 			System.out.println(getName() + " was interrupted. " + " isInterrupted(): " + isInterrupted());
 			return;
 		}
@@ -49,11 +50,11 @@ class Joiner extends Thread {
 public class InterruptAndJoin {
 	public static void main(String args[]) {
 		//Sleeper sleepy = new Sleeper("Sleepy", 3000);
-		Sleeper grumpy = new Sleeper("Sleeper", 3000);
+		Sleeper sleepy = new Sleeper("Sleeper", 3000);
 		//Joiner dopey = new Joiner("Dopey", sleepy);
-		Joiner doc = new Joiner("Joiner", grumpy);
+		Joiner joiner = new Joiner("Joiner", sleepy);
 
-		grumpy.interrupt();//把子线程打断后，就可以让父线程继续执行了，否则等待。
+		sleepy.interrupt();//把子线程打断后，就可以让父线程直接运行了，否则等待子线程运行完后再运行。
 
 	}
 }

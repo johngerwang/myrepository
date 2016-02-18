@@ -3,6 +3,12 @@ package com.wang.concurrency;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Account:存钱，取钱，增加利息，使用synchronized关键字同步这几个方法。
+ * Company：线程，存钱
+ * Bank：线程，取现，增加利息
+ * 
+ */
 public class SynchronizedMethodTester {
 	public static void main(String[] args) throws InterruptedException{
 		Account account = new Account(100);
@@ -33,9 +39,7 @@ class Account{
 	public static String getName(){
 		return name;
 	}
-	private void modifyName(String myname){
-		name = myname;
-	}
+
 	public static synchronized void modify(String myname){
 		name = myname;
 	}
@@ -119,7 +123,6 @@ class Company implements Runnable{
 		for(int i=0;i<10;i++){
 			try {
 				account.add(100);
-				account.addinterest();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

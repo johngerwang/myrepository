@@ -22,7 +22,7 @@ public class ThreadCaughtException {
 
 class ExceptionHandler implements UncaughtExceptionHandler{
 
-	@Override
+	@Override//必须要实现UncaughtExceptionHandler接口的uncaughtException方法
 	public void uncaughtException(Thread t, Throwable e) {
 		System.out.println("Exception Caughted");
 		System.out.println(t.getName()+": " +t.getId()+" : " +t.getState());

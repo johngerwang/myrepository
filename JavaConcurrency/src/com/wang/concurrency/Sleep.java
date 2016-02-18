@@ -11,7 +11,7 @@ public class Sleep {
 			for(int i=0;i<10;i++){
 				System.out.println(Thread.currentThread().getName()+"-" + i+" : "+ new Date());
 				try{
-					Thread.sleep(1000); //实际调用的是currentThread().sleep()方法
+					Thread.sleep(1000); //当前线程休眠，到时间后自动恢复
 				}catch(InterruptedException e){
 					System.out.println(Thread.currentThread().getName() + " is interrupted" );				}
 			}

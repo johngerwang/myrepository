@@ -10,7 +10,7 @@ public class Interrupt {
 		}catch(InterruptedException e){
 			e.printStackTrace();
 		}
-		task.interrupt();
+		task.interrupt();//打断该线程的运行
 	}
 
 }
@@ -24,7 +24,7 @@ class CaculatePrimes extends Thread {
 			if(isPrimes(number)){
 				System.out.println("Prime Number is " + number );
 			}
-			if(this.isInterrupted()){
+			if(this.isInterrupted()){//判断是否被打断
 				System.out.println("Current Thread is interrupted");
 				return;
 			}

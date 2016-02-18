@@ -1,0 +1,21 @@
+<html>
+<head>
+  <title>Spring & Velocity</title>   
+</head>
+<body>
+   <div>
+       #parse("/WEB-INF/fragments/_header.vm")
+   </div>
+    
+    
+   <div>
+	<!--The $screen_content variable is used by the VelocityLayoutViewResolver to 
+	include the result of an other VM in the layout-->
+     $screen_content
+    </div>
+    
+   <div>
+       #parse("/WEB-INF/fragments/_footer.vm")
+   </div>
+</body>
+</html>

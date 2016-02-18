@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ *使用ThreadFactory工厂模式生产线程。好处如，可以控制线程的数量 。
+ * 必须要实现ThreadFactory接口的newThread(Runnable r)方法
+ */
 public class ThreadFactoryTester {
 
 	public static void main(String[] args) {
@@ -36,6 +41,7 @@ public class ThreadFactoryTester {
 		public int getCounter(){
 			return counter;
 		}
+		//本方法只是为了将所有的线程信息封装到StringBuffer中，以便输出而已。
 		public String getStatus(){
 			StringBuffer sb = new StringBuffer();
 			Iterator<String> it = status.iterator();
@@ -50,6 +56,7 @@ public class ThreadFactoryTester {
 			if (counter < 10) {
 				Thread thread = new Thread(r, name + "_Thread_" + counter);
 				counter++;
+				//将线程信息加入到list中。在getStatus方法中拼装成字符串
 				status.add(String.format("Thread name is %s,id is %d,date is %s\n", thread.getName(),
 						thread.getId(), new Date()));
 				return thread;

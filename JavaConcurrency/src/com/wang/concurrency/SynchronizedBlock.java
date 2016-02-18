@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *Room：位置数
+ *Cinema:买票，卖票。使用Synchronized关键字同步Room对象。 同时只能有一个线程来调用使用了synchronized的代码块。
+ *Saler：实现了Runnable的线程。调用cinema的买票，卖票。
+ * 
+ */
 public class SynchronizedBlock {
 
 	public static void main(String[] args) throws InterruptedException {
@@ -47,10 +53,6 @@ class Room {
 
 	public void setSeats(int seats) {
 		this.seats = seats;
-	}
-
-	public void modifySeats(int seats) {
-
 	}
 
 	public String getName() {

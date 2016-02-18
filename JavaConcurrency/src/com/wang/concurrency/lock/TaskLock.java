@@ -12,7 +12,7 @@ public class TaskLock {
 		
 		t1.start();
 		t2.start();
-		t2.interrupt();
+		//t2.interrupt();
 		
 	}
 }

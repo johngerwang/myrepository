@@ -7,6 +7,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+//ScheduleThreadPoolExecutor管理定期任务的线程池。
 class CallableTask implements Callable<String>{
 
 	@Override
@@ -29,7 +30,7 @@ public class ScheduleThreadPoolExecutorTester{
 		
 		for(int i=0;i<5;i++){
 			CallableTask t = new CallableTask();
-			stpe.schedule(t, 1+i, TimeUnit.SECONDS);
+			stpe.schedule(t, 1+i, TimeUnit.SECONDS);//等待1+i秒后开始执行
 		}
 		stpe.shutdown();
 
@@ -48,13 +49,13 @@ public class ScheduleThreadPoolExecutorTester{
 		ScheduledThreadPoolExecutor stpe = (ScheduledThreadPoolExecutor)Executors.newScheduledThreadPool(1);
 		
 			RunnableTask t = new RunnableTask();
-			//第3个参数的意思是，每次开始的时间的间隔。如果线程执行时间大于该参数，则会出现2个线程同时执行的情况
+			//第3个参数的意思是，以固定的频率(2秒一次）来执行。如果线程执行时间大于该参数，则会出现2个线程同时执行的情况
 			//ScheduledFuture<?> 是一个泛化接口，因为runnable并没有泛化参数。
 			//只能接受Runnable接口，不能是Callable
 			ScheduledFuture<?> result = stpe.scheduleAtFixedRate(t, 1, 2, TimeUnit.SECONDS);
 			
-			//与上面的方法唯一的区别是第3个参数的意思不同。此处是指一轮线程结束后距离开一轮开始运行的时间。
-			//stpe.scheduleWithFixedDelay(command, initialDelay, delay, unit)
+			//与上面的方法唯一的区别是第3个参数的意思不同。此处是指一轮线程"结束"后再过delay的时间后开始运行。
+			//stpe.scheduleWithFixedDelay(runnable, initialDelay, delay, unit)
 			
 			for(int i =0;i<10;i++){
 				System.out.println(result.getDelay(TimeUnit.MILLISECONDS));

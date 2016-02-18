@@ -1,0 +1,6 @@
+tomcat:deploy/redeploy	(再)部署一个web war包。此处只能部署到外部的tomcat。
+tomcat:reload	重新加载web war包
+tomcat:start    启动tomcat
+tomcat:stop     停止tomcat
+tomcat:undeploy 停止一个war包
+tomcat:run	    启动嵌入式tomcat ，并运行当前项目。如果要使用外部的tomcat(非内嵌）则不能使用该命令。得在外部先启动tomcat，然后使用redeploy.

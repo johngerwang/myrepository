@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>Spring & Velocity</title>   
+</head>
+<body>
+   <div>
+       #parse("/fragments/_header.vm")
+   </div>
+    
+    
+   <div>
+	<!--The $screen_content variable is used by the VelocityLayoutViewResolver to 
+	include the result of an other VM in the layout-->
+     $screen_content
+    </div>
+    <!--
+    如果你在处理某个请求时返回了a.vm模板，那么最终返回的页面是：将a.vm模板的内容填充layout页面的
+    $screen_content占位符的内容，然后再将整个填充后的页面返回给用户。
+    如果有兴趣你可以看一下大致的实现原理，其实很简单，就是先调用velocity引擎渲染请求返回的模板，
+    将该渲染结果（一个String类型的字符串）作为一参数传递给layout页面，参数名称就是screen_content，
+    然后再次调用引擎渲染layout页面，这样就会把该screen_content参数对应的值作为页面的一部分渲染出来了，从而实现整个页面的布局功能。-->
+    <!--当存在某一个页面不需要使用注意的布局时，可以通过#set($layout=/xxx/layout2.vm)来强制使用其他布局-->
+   <div>
+       #parse("fragments/_footer.vm")
+   </div>
+</body>
+</html>

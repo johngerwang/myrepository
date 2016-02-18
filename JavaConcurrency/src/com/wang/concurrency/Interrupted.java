@@ -9,14 +9,14 @@ public class Interrupted {
 		Thread task = new Thread(fs);
 		task.start();
 		try{
-//			TimeUnit.MILLISECONDS.sleep(10);
-//			TimeUnit.SECONDS.sleep(10);
+			TimeUnit.MILLISECONDS.sleep(10);
+// 			TimeUnit.SECONDS.sleep(1);
 //			TimeUnit.MINUTES.sleep(10);
 //			Thread.sleep(10);
 //			Thread.sleep(10*1000);
 //			Thread.sleep(10*60*1000);
 			//TimeUnit.MILLISECONDS.sleep(1);#只是对Thread.sleep()方法的包装，提供时间单位的换算。Thread.sleep()是毫秒级的，而此方法可以有秒级别的。
-			Thread.sleep(1);
+	//		Thread.sleep(1);
 		}catch(InterruptedException e){
 			System.out.println("Interrupted");
 		}
@@ -36,7 +36,7 @@ class FileSearcher implements Runnable{
 			try {
 				processDir(initDir);
 			} catch (InterruptedException e) {
-				System.out.println("The Search was interrupted by"+Thread.currentThread().getName());
+				System.out.println("The Search was interrupted by "+Thread.currentThread().getName());
 			}
 		}else{
 			System.out.println("Is not a directory: " + initDir.getName());
@@ -53,7 +53,7 @@ class FileSearcher implements Runnable{
 				processFile(files[i]);
 			}
 		}
-		if(Thread.interrupted()){ //currentThread().isInterrupted(true);
+		if(Thread.interrupted()){ //其实就是调用的currentThread().isInterrupted(true);
 			throw new InterruptedException(); 
 		}
 	}

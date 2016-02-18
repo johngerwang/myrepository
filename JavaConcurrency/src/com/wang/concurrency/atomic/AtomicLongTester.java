@@ -24,7 +24,7 @@ public class AtomicLongTester {
 		ThreadPoolExecutor  tpe = (ThreadPoolExecutor)Executors.newCachedThreadPool();
 		Bank bank = new Bank(account);
 		Company company = new Company(account);
-		tpe.execute(bank);
+		tpe.execute(bank);//使用execute的场合，无返回值，只能用Runnable线程。使用submit时，可以使用runnable和callable（有返回值）,有返回值Future
 		tpe.execute(company);
 		tpe.shutdown();
 		try {

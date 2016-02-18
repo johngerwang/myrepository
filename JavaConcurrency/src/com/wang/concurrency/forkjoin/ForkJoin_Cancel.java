@@ -59,7 +59,7 @@ class TaskManager {
 	public void cancelTasks(ForkJoinTask<Integer> cancelTask) {
 		for (ForkJoinTask<Integer> task : taskList) {
 			if (task != cancelTask) {
-				if(task.cancel(true)){// 实际上这个true是无效的，来自api稳定的说法，
+				if(task.cancel(true)){// 实际上这个true是无效的，来自api文档的说法，
 									// 除非已创建未运行，运行或者结束的情况下是不能取消的。
 				((Searcher)task).printCancelMessage();
 				}

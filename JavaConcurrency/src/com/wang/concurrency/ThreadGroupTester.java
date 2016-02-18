@@ -3,6 +3,11 @@ package com.wang.concurrency;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 使用线程组，Thread et = new Thread(ThreadGroup,Runnable)
+ * 是线程可以一个整体来控制，比如设置一个线程组的遗产捕捉后，那么所有所属与这个线程组的线程的异常都可以被捕获
+ * 
+ */
 public class ThreadGroupTester {
 
 	public static void main(String[] args) {
@@ -11,7 +16,7 @@ public class ThreadGroupTester {
 
 	public static void testUncaughtException(){
 		MyThreadGroup mtg = new MyThreadGroup("expcetion");
-		Thread et = new Thread(mtg,new Runnable(){
+		Thread et = new Thread(mtg,new Runnable(){//将线程加入线程组。
 			@Override
 			public void run() {
 				while(true){
@@ -80,6 +85,7 @@ class MyThreadGroup extends ThreadGroup{
 		super(name);
 	}
 	//该非捕获异常的优先级为2.线程的defaultExceptionHandler设置的优先级为3.
+	//优先级为1的是，线程自身的uncaughtException。参考ThreadCaughtException类
 	@Override
 	public void uncaughtException(Thread t,Throwable e){
 		System.out.println(t.getName()+" throws exception: "+e.getMessage());

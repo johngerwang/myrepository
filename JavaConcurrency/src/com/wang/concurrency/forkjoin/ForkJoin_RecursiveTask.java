@@ -83,7 +83,7 @@ class Document {
 		return document;
 	}
 }
-
+//递归调用的任务。跟RecursiveAction的区别是一个有返回值，一个没有。
 class DocumentTask extends RecursiveTask<Integer> {
 
 	private static final long serialVersionUID = 1L;
@@ -109,9 +109,9 @@ class DocumentTask extends RecursiveTask<Integer> {
 			int middle = (end + start) / 2;
 			DocumentTask dt1 = new DocumentTask(start, middle, word, document);
 			DocumentTask dt2 = new DocumentTask(middle, end, word, document);
-			invokeAll(dt1, dt2);// 同步的。所有的DocumentTask都完成后才能往下。
+			invokeAll(dt1, dt2);// 同步的。所有的DocumentTask都完成后才能往下。1.分散fork成2个Task
 			try {
-				Integer result1 = dt1.get();
+				Integer result1 = dt1.get();//2.然后再在此处合并join
 				//System.out.println("DocumentTask.compute(1): " + result1);
 				Integer result2 = dt2.get();
 				//System.out.println("DocumentTask compute(2): " + result2);

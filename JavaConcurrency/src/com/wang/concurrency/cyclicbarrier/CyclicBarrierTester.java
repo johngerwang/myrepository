@@ -6,13 +6,13 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 //使用CyclicBarrier类，使当所有的任务都完成时，才启动一个新的任务。任务数和新任务都是在该类的构造函数中定义的。
-//否则因CyclicBarrier#await()方法等待。好像是每次await()被调用，则计数-1
+//否则因CyclicBarrier#await()方法等待。是每次await()被调用则计数+1
 
 //在使用CyclicBarrier时，需要创建一个CyclicBarrier对象，构造函数需要一个整数作为参数，
 //这个参数是一个“目标”，在CyclicBarrier对象创建后，内部会有一个计数器，初始值为0，
-//CyclicBarrier对象的await方法没被调用一次，这个计数器就会加1，一旦这个计数器的值达到设定的“目标”，
+//CyclicBarrier对象的await方法每被调用一次，这个计数器就会加1，一旦这个计数器的值达到设定的“目标”，
 //所有被CyclicBarrier.await阻塞住的线程都会继续执行。这个目标是固定的，一旦设定便不能修改。 
-//举一个形象的例子，假设有5个人爬山，他们要爬到山顶，等到5个人到期了在同时出发下山，
+//举一个形象的例子，假设有5个人爬山，他们要爬到山顶，等到5个人到齐了，再同时出发下山。
 //那么我们要在山顶设定一个“目标”，同时还有一个计数器，这个目标就是5，每到山顶一个人，
 //这个人就要等待，同时计数器加1，等到5个人到齐了，也就是计数器达到了这个“目标”，所有等待的人就开始下山了。
 

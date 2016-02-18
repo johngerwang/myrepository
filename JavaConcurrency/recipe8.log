@@ -1,0 +1,23 @@
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Core.main()ENTRY
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainLauching thread#0
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainThread created: Thread-1
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainLauching thread#1
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Thread-1.run()ENTRY
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainThread created: Thread-2
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainLauching thread#2
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Thread-2.run()ENTRY
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainThread created: Thread-3
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainLauching thread#3
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Thread-3.run()ENTRY
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainThread created: Thread-4
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainLauching thread#4
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Thread-4.run()ENTRY
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.mainThread created: Thread-5
+[INFO]-Wed Dec 30 16:27:29 CST 2015 : com.wang.concurrency.logger.LoggerTester.main10 Threads Created.
+[FINER]-Wed Dec 30 16:27:29 CST 2015 : Thread-5.run()ENTRY
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Thread-1.run()RETURN {0}
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Thread-2.run()RETURN {0}
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Thread-3.run()RETURN {0}
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Thread-4.run()RETURN {0}
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Thread-5.run()RETURN {0}
+[FINER]-Wed Dec 30 16:27:31 CST 2015 : Core.mainRETURN

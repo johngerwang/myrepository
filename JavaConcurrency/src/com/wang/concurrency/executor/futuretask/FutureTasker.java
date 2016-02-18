@@ -38,7 +38,7 @@ public class FutureTasker {
 	}
 
 }
-
+//FutureTask实现了Runnable接口，可以理解为具有Runnable和Future的2个特性，又新增了一些功能，如done回调。
 class MyFutureTask extends FutureTask<String> {
 
 	private String name;
@@ -47,7 +47,7 @@ class MyFutureTask extends FutureTask<String> {
 		super(callable);
 		this.name = ((MyTask) callable).getName();
 	}
-
+//当任务结束时，会自动调用该方法
 	protected void done() {
 		if (this.isCancelled()) {
 			System.out.println("MyFutureTask is cancelled " + name);

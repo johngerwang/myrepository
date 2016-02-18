@@ -1,0 +1,70 @@
+jdk，jre,jvm
+jvm是指java虚拟机，类似于一个pc。
+jre是指java运行环境，里面包含一个jvm。
+JDK是指开发工具，里面包含有jre。因为jdk中的命令如java.exe也是用java写的，所以需要jre才能执行。
+
+
+wrapper
+
+classloader实现动态性
+在java虚拟机不重新启动的情况下，加载新的class（只能加入新的class，替换旧的class未必可行，因为旧的class可能已经在内存中了，有数据了），
+就能实现动态性。不需要全部重新编译。
+
+隐示加载，显示加载
+隐示加载：new
+显示加载，Class.ForName或者ClassLoader.loadClass
+
+类的静态代码块，只有在创建(new/newInstance)对象的时候才会执行。
+如果需要静态代码块在new之前执行，则需要将Class.forName的initial参数设置为true，这样的话，在创建Class对象的时候，就可以执行该静态代码块了。
+ClassLoader的loadClass方法不能在加载Class的时候执行静态代码块，只能在创建对象的时候执行。
+
+获取Class对象有2种方法。1.对象.getClass()。2.对象.class属性
+AppClassLoader：System Classloader，系统加载器
+Bootstrap Loader：当getClassLoader获得的值为Null时，并非是无类加载器，而是Bootstrap Loader，因为并非java对象，故无法获得对象。该加载器是一切加载器的ROOT。
+URLClassLoader：通过URL的方式制定class所处的位置。如果要指定相对于主程序（包含main方法的类）的路径，可以使用file:lib/。绝对路径可以使用file:/D/myclass/
+
+Bootstrap Loader->ExtClassLoader->AppClassLoader
+Bootstrap Loader载入ExtClassLoader，ExtClassLoader载入AppClassLoader。
+AppClassLoader的getParent是ExtClassLoader，ExtClassLoader的getParent是Bootstrap Loader（表现出来的是null)
+类加载器也是由类加载器加载的，AppClassLoader和ExtClassLoader都是由Bootstrap Loader加载。
+
+搜索路径
+ExtClassLoader，搜索java.ext.dirs变量定义的路径。–Djava.ext.dirs指定的目录。即java.exe所选择的jre所在位置下的lib\ext
+默认值如下
+C:\Program Files\Java\jre1.8.0_45\lib\ext;
+C:\windows\Sun\Java\lib\ext
+会搜索所有的jar文件和classes目录。
+
+AppClassLoader，搜搜java.class.path环境变量定义的路径。-classpath指定的目录。
+默认值为当前目录,即"."
+ 
+
+Bootstrap Loader，搜索由sun.boot.class.path参数指定的路径。-Dsun_boot_class_path指定的路径（旧jdk1.4以前）。-Xbootclasspath新jdk1.5
+默认值如下。
+C:\Program Files\Java\jre1.8.0_45\lib\resources.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\rt.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\sunrsasign.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\jsse.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\jce.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\charsets.jar;
+C:\Program Files\Java\jre1.8.0_45\lib\jfr.jar;
+C:\Program Files\Java\jre1.8.0_45\classes
+
+注意ExtClassLoader和AppClassLoader的搜索路径可以改变，但也仅限于开始运行之前，运行后再改变无效。而Bootstrap Loader的搜索路径不能改变。
+
+双亲委托模型。
+当类加载器有加载需求时首先委派自己的root(Bootstrap Loader）。
+如果找不到，那么会逐层下向委派。
+如果在某一层次找到了，那么加载。例外，
+1.在root加载到类后，如果继续有其他类需要加载，而该类不在Bootstrap Loader的搜索路径中则会找不到报错。
+2.如果在ExtClassLoader加载到需要加载的类的前提下。
+ 如果继续有其他类需要加载，则会向root求助，而该类不在root的搜索路径中则会找不到，则会由ExtClassLoader来加载，如果ExtClassLoader找不到，则报错，
+ 而不会去让APPClassLoader去加载，虽然最初是由APPClassLoader发起的请求。
+
+注意：1.只要在某一个类加载器中已经发现了该在已经被加载，则直接返回。自底向上确认是否已经被加载。自顶向下尝试加载。
+2.要确定一个类，必须有类名+ClassLoader两者才能决定。即即使类名相同，而classloader不同，也被认为加载的是不同的类。
+如果进行强制转换会出现java.lang.ClassCastException.
+3. 最终只能返回到加载到类的那个类加载器级别，不能继续向下。
+作用
+1、采用双亲委托模型模型后，类加载的时候，最开始都由Bootstrap Loader去加载，即可避免不同的类加载器加载导致在JVM中被认为是不同的类，避免重复的隐患。
+

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                        http://www.springframework.org/schema/jee
+                        http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+                        http://www.springframework.org/schema/util 
+                        http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="com.maven.spring.mvc.*" />
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/styles/**" location="/styles/" />
+	<mvc:resources mapping="/scripts/**" location="/scripts/" />
+	<mvc:resources mapping="/images/**" location="/images/" />
+	<!-- 多个viewResolver共存时，要注意优先级，一般InternalResourceViewResolver要设置低优先级,否则会先去查找jsp文件，而不能查找vm文件-->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+ 		<property name="order" value ="1" />
+	</bean>
+
+	<bean id="velocityConfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/" />
+		<property name="configLocation" value="/WEB-INF/velocity.properties" />
+	</bean>
+
+	<!-- 1.一般情况下，当我们不使用velocity的布局功能时，我们一般会把viewResolver的class配置为： -->
+	<!-- org.springframework.web.servlet.view.velocity.VelocityViewResolver， -->
+	<!-- 当需要使用布局功能的时候，viewResolver的class需要配置为： -->
+	<!-- org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver， -->
+	<!-- 顾名思义，从命名中我们就能看出来这个viewResolver是支持layout功能的。 -->
+	<!-- 2. 另外一点不同的是，这里多了一个layoutUrl的属性配置是设置你的layout文件的存在路径， -->
+	<!-- 需要注意的是，这个路径不是相对于webapp路径来的，而是相对于velocityConfig配置中的 -->
+	<!-- resourceLoaderPath属性配置的路径（resourceLoaderPath的路径是相对于webapp的路径）。 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="cache" value="true" />
+		<!-- 相对于resourceLoaderPath的位置 -->
+		<property name="layoutUrl" value="/layouts/layout.vm" />
+		<property name="prefix" value="/views/" />
+		<property name="suffix" value=".vm" />
+		<property name="order" value ="0" />
+	</bean>
+</beans>
