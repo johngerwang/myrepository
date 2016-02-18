@@ -1,4 +1,4 @@
-refer to  the process.png
+#refer to  the process.png(no annotation)
 
 1.Users type in the path: http://localhost:8080/maven-struts2
 2.According to the above configuration on web.xml welcome page login.jsp page will be opened up. 
@@ -11,3 +11,15 @@ refer to  the process.png
 5.Program in the struts.xml to search page returns the String value is returned in the previous step. 
 6.The page site is returned to the user.
 
+
+#refer to the struts-annotation-process.png(annotation)
+
+1.Users type in: http://localhost:8080/Struts2Annotation 
+2.According to configured the welcome page in web.xml login.jsp page will be returned. 
+3.The user enters the username and password and click Login, action "login" is executed. 
+	It will seek class action suit action "login" . 
+4.Search Action class.
+5.Execute method execute () in Action class found. 
+6.This method returns the String, depending on the return value of the corresponding page will be returned to the user. 
+	Returns a "success" 
+	Or "error"
